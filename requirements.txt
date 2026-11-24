@@ -1,0 +1,11 @@
+# Entrenamiento (la app tiene su propio app/requirements.txt, mas ligero)
+scikit-learn==1.9.1
+pandas
+pyarrow
+numpy
+matplotlib
+joblib
+mlflow
+dagshub
+kaggle
+flask

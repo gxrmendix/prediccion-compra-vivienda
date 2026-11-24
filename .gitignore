@@ -1,0 +1,12 @@
+# Datos de Kaggle: se descargan con descargar_datos.sh
+datos/
+
+# Credenciales y registros locales de MLflow
+.env
+mlruns/
+mlflow.db
+
+__pycache__/
+*.pyc
+.DS_Store
+.venv/

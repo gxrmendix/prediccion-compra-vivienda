@@ -1,0 +1,24 @@
+{
+ "filas": 200000,
+ "columnas": 25,
+ "nulos": 0,
+ "tasa_compra": 0.2303,
+ "particion": {
+  "entrenamiento": {
+   "filas": 140000,
+   "porcentaje": 70.0,
+   "tasa_compra": 0.2303
+  },
+  "validacion": {
+   "filas": 20000,
+   "porcentaje": 10.0,
+   "tasa_compra": 0.2303
+  },
+  "prueba": {
+   "filas": 40000,
+   "porcentaje": 20.0,
+   "tasa_compra": 0.2303
+  }
+ },
+ "formula_mensualidad_coincide": 1.0
+}
