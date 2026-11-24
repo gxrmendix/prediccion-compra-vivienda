@@ -1,138 +1,292 @@
+{%- macro val(k, d='') -%}{{ form.get(k) if form.get(k) is not none else d }}{%- endmacro -%}
+{%- macro sel(k, v, d='') -%}{% if (form.get(k) if form.get(k) is not none else d)|string == v|string %}checked{% endif %}{%- endmacro -%}
 <!doctype html>
 <html lang="es">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>¿Comprará la casa?</title>
-<style>
-  :root {
-    --fondo: #f6f5f1; --superficie: #fcfcfb; --tinta: #0b0b0b; --tinta-2: #52514e; --tenue: #898781;
-    --rejilla: #e1e0d9; --azul: #2a78d6; --azul-suave: #cde2fb; --naranja: #eb6834; --alerta: #fdf1ea;
-  }
-  @media (prefers-color-scheme: dark) {
-    :root {
-      --fondo: #0d0d0d; --superficie: #1a1a19; --tinta: #ffffff; --tinta-2: #c3c2b7; --tenue: #898781;
-      --rejilla: #2c2c2a; --azul: #3987e5; --azul-suave: #1c3557; --naranja: #d95926; --alerta: #2b1d16;
-    }
-  }
-  * { box-sizing: border-box; }
-  body { margin: 0; background: var(--fondo); color: var(--tinta);
-         font: 16px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
-  main { max-width: 760px; margin: 0 auto; padding: 32px 16px 48px; }
-  h1 { font-size: 1.7rem; margin: 0 0 4px; }
-  .subtitulo { color: var(--tinta-2); margin: 0 0 24px; }
-  form, .resultado, .nota { background: var(--superficie); border: 1px solid var(--rejilla); border-radius: 10px; padding: 20px; }
-  fieldset { border: 0; padding: 0; margin: 0 0 18px; }
-  legend { font-weight: 700; margin-bottom: 10px; }
-  .rejilla { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; }
-  label { display: block; font-size: .92rem; color: var(--tinta-2); margin-bottom: 4px; }
-  input, select { width: 100%; padding: 9px 10px; border: 1px solid var(--rejilla); border-radius: 6px;
-                  background: var(--fondo); color: var(--tinta); font-size: 1rem; }
-  input:focus, select:focus { outline: 2px solid var(--azul); outline-offset: 1px; }
-  .opciones { display: flex; gap: 18px; padding-top: 6px; }
-  .opciones label { display: flex; gap: 6px; align-items: center; color: var(--tinta); }
-  .opciones input { width: auto; }
-  .ayuda { font-size: .82rem; color: var(--tenue); margin-top: 3px; }
-  button { background: var(--azul); color: #fff; border: 0; border-radius: 6px; padding: 11px 22px;
-           font-size: 1rem; font-weight: 600; cursor: pointer; }
-  .errores { background: var(--alerta); border-left: 3px solid var(--naranja); padding: 10px 14px; margin-bottom: 16px; border-radius: 4px; }
-  .resultado { margin-top: 20px; }
-  .numero { font-size: 3rem; font-weight: 800; line-height: 1; }
-  .barra { height: 10px; background: var(--rejilla); border-radius: 5px; margin: 12px 0 6px; overflow: hidden; }
-  .barra span { display: block; height: 100%; background: var(--azul); border-radius: 5px; }
-  .detalle { color: var(--tinta-2); font-size: .92rem; }
-  ul.avisos { padding-left: 18px; margin: 10px 0 0; }
-  .nota { margin-top: 20px; font-size: .88rem; color: var(--tinta-2); }
-</style>
+<title>Estimador de compra · ¿Tu cliente comprará la casa?</title>
+<meta name="description" content="Estima la probabilidad de que un cliente compre una vivienda a partir de la ubicación, la propiedad, el comprador y su crédito hipotecario.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cpath d='M4 15 16 5l12 10v13H4z' fill='%231f4d3a'/%3E%3Cpath d='M13 28v-8h6v8' fill='%23c8643b'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{{ url_for('static', filename='estilo.css') }}">
+<script src="{{ url_for('static', filename='app.js') }}" defer></script>
 </head>
 <body>
-<main>
-  <h1>¿Comprará la casa?</h1>
-  <p class="subtitulo">Estima la probabilidad de que tu cliente compre, con los datos que un vendedor puede conseguir.</p>
 
-  <form method="post" novalidate>
+<header class="heroe">
+  <div class="barra-sup">
+    <a class="marca" href="/">
+      <svg viewBox="0 0 32 32" aria-hidden="true"><path d="M4 15 16 5l12 10v13H4z" fill="currentColor"/><path d="M13 28v-8h6v8" fill="#c8643b"/></svg>
+      Estimador de compra
+    </a>
+    <nav class="nav"><a href="#formulario">Estimar</a><a href="#como-funciona">Cómo funciona</a></nav>
+  </div>
+  <div class="heroe-int">
+    <div>
+      <span class="etiqueta">Para asesores inmobiliarios</span>
+      <h1>¿Tu cliente comprará la casa?</h1>
+      <p>Describe la vivienda, su entorno y el crédito hipotecario del comprador. El modelo, entrenado con 140 000 decisiones de compra, calcula la probabilidad de cierre y te dice qué la está frenando.</p>
+      <div class="ejemplos">Prueba un ejemplo:
+        <a href="/?ejemplo=ideal#resultado">Cliente ideal</a>
+        <a href="/?ejemplo=sin_visita#resultado">Antes de la visita</a>
+        <a href="/?ejemplo=problemas#resultado">Caso con problemas</a>
+      </div>
+    </div>
+    <svg class="ilustracion" viewBox="0 0 520 220" role="img" aria-label="Ilustración de una calle con casas">
+      <circle class="sol" cx="430" cy="58" r="30" fill="#e9b25b" opacity=".6"/>
+      <g class="nube" fill="#fff" opacity=".75"><ellipse cx="80" cy="44" rx="30" ry="11"/><ellipse cx="100" cy="36" rx="20" ry="12"/></g>
+      <g class="nube dos" fill="#fff" opacity=".6"><ellipse cx="250" cy="28" rx="26" ry="9"/><ellipse cx="266" cy="22" rx="16" ry="10"/></g>
+      <path d="M0 200h520v20H0z" fill="#c9bba3"/>
+      <g fill="#d6cab5"><path d="M20 200v-70l40-30 40 30v70z"/><path d="M400 200v-90h70v90z"/></g>
+      <g class="casa">
+        <path d="M110 200v-78l62-46 62 46v78z" fill="#2f6b4f"/><path d="M100 126l72-54 72 54-9 9-63-47-63 47z" fill="#1f4d3a"/>
+        <path d="M157 200v-42h30v42z" fill="#c8643b"/>
+        <path class="ventana" d="M126 140h22v20h-22z" fill="#f7e9c8"/><path class="ventana b" d="M196 140h22v20h-22z" fill="#f7e9c8"/>
+      </g>
+      <g class="casa b">
+        <path d="M262 200v-96h118v96z" fill="#c8643b"/><path d="M252 108l69-42 69 42-8 9-61-37-61 37z" fill="#9c4a2a"/>
+        <path d="M306 200v-38h30v38z" fill="#1f4d3a"/>
+        <path class="ventana b" d="M278 124h26v22h-26z" fill="#f7e9c8"/><path class="ventana" d="M338 124h26v22h-26z" fill="#f7e9c8"/>
+        <path d="M352 76h12v26h-12z" fill="#9c4a2a"/>
+      </g>
+      <g class="arbol"><path d="M70 186h4v14h-4z" fill="#6b5a44"/><circle cx="72" cy="168" r="22" fill="#3f7d5c"/></g>
+      <g class="arbol b"><path d="M464 186h4v14h-4z" fill="#6b5a44"/><circle cx="466" cy="166" r="24" fill="#3f7d5c"/></g>
+      <g class="arbol c"><path d="M234 190h4v10h-4z" fill="#6b5a44"/><circle cx="236" cy="178" r="14" fill="#3f7d5c"/></g>
+    </svg>
+  </div>
+</header>
+
+<main id="formulario">
+  <form class="tarjeta" id="form" method="post" action="/#resultado" novalidate aria-labelledby="tit-form">
+    <h2 id="tit-form" class="oculto">Datos de la venta</h2>
     {% if errores %}
     <div class="errores" role="alert">{% for e in errores %}<div>{{ e }}</div>{% endfor %}</div>
     {% endif %}
 
-    <fieldset>
-      <legend>La propiedad</legend>
-      <div class="rejilla">
-        <div>
-          <label>¿Tiene algún caso legal abierto?</label>
-          <div class="opciones">
-            <label><input type="radio" name="legal" value="0" {% if form.get('legal', '0') == '0' %}checked{% endif %}> No</label>
-            <label><input type="radio" name="legal" value="1" {% if form.get('legal') == '1' %}checked{% endif %}> Sí</label>
-          </div>
+    <!-- 1. Ubicacion y entorno -->
+    <div class="seccion">
+      <div class="seccion-tit">
+        <span class="icono"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg></span>
+        <div><span class="paso">Paso 1</span><h2>Ubicación y entorno</h2></div>
+      </div>
+      <div class="campos">
+        <div class="campo">
+          <label for="pais">País</label>
+          <select id="pais" name="pais" required>
+            <option value="" disabled {% if not form.get('pais') %}selected{% endif %}>Elige un país</option>
+            {% for clave, nombre in paises|dictsort(by='value') %}<option value="{{ clave }}" {% if form.get('pais') == clave %}selected{% endif %}>{{ nombre }}</option>{% endfor %}
+          </select>
         </div>
-        <div>
-          <label for="crimenes">Delitos reportados en la zona</label>
-          <input id="crimenes" name="crimenes" type="number" min="0" max="50" step="1" value="{{ form.get('crimenes', '') }}" placeholder="p. ej. 1">
-          <div class="ayuda">Casos reportados recientemente cerca de la propiedad.</div>
+        <div class="campo">
+          <label for="ciudad">Ciudad</label>
+          <select id="ciudad" name="ciudad" required>
+            <option value="" disabled {% if not form.get('ciudad') %}selected{% endif %}>Elige una ciudad</option>
+            {% for clave, nombre in paises|dictsort(by='value') %}
+            <optgroup label="{{ nombre }}" data-pais="{{ clave }}">
+              {% for c in ciudades[clave] %}<option value="{{ c }}" data-pais="{{ clave }}" {% if form.get('ciudad') == c %}selected{% endif %}>{{ c }}</option>{% endfor %}
+            </optgroup>
+            {% endfor %}
+          </select>
         </div>
       </div>
-    </fieldset>
-
-    <fieldset>
-      <legend>El cliente</legend>
-      <div class="rejilla">
-        <div>
-          <label for="salario">Salario mensual</label>
-          <input id="salario" name="salario" type="number" min="1" step="any" value="{{ form.get('salario', '') }}" placeholder="p. ej. 12000">
+      <div class="campos">
+        <div class="campo">
+          <label for="vecindario">Calificación del vecindario</label>
+          <div class="deslizador"><input id="vecindario" name="vecindario" type="range" min="1" max="10" step="1" value="{{ val('vecindario', 5) }}"><output for="vecindario">{{ val('vecindario', 5) }}</output></div>
+          <div class="ayuda">Servicios, limpieza, tranquilidad (1 a 10).</div>
         </div>
-        <div>
-          <label for="prestamo">Monto del préstamo que pediría</label>
-          <input id="prestamo" name="prestamo" type="number" min="1" step="any" value="{{ form.get('prestamo', '') }}" placeholder="p. ej. 250000">
+        <div class="campo">
+          <label for="conectividad">Conectividad</label>
+          <div class="deslizador"><input id="conectividad" name="conectividad" type="range" min="1" max="10" step="1" value="{{ val('conectividad', 5) }}"><output for="conectividad">{{ val('conectividad', 5) }}</output></div>
+          <div class="ayuda">Transporte, vías, distancia al centro (1 a 10).</div>
         </div>
-        <div>
-          <label for="plazo">Plazo del préstamo</label>
-          <select id="plazo" name="plazo">
-            {% for p in plazos %}<option value="{{ p }}" {% if form.get('plazo', '20') == p|string %}selected{% endif %}>{{ p }} años</option>{% endfor %}
-          </select>
-          <div class="ayuda">La mensualidad se calcula al 6.5 % anual.</div>
-        </div>
-        <div>
-          <label for="satisfaccion">Calificación de la visita (opcional)</label>
-          <select id="satisfaccion" name="satisfaccion">
-            <option value="">Todavía no visita la casa</option>
-            {% for s in range(1, 11) %}<option value="{{ s }}" {% if form.get('satisfaccion') == s|string %}selected{% endif %}>{{ s }} de 10</option>{% endfor %}
-          </select>
-          <div class="ayuda">Del 1 al 10, ¿qué tanto le gustó la casa al cliente?</div>
+        <div class="campo">
+          <label for="delitos">Delitos reportados en la zona</label>
+          <input id="delitos" name="delitos" type="number" inputmode="numeric" min="0" max="10" step="1" value="{{ val('delitos') }}" placeholder="p. ej. 1" required>
+          <div class="ayuda">Casos recientes cerca (0 a 10).</div>
         </div>
       </div>
-    </fieldset>
+    </div>
 
-    <button type="submit">Calcular probabilidad</button>
+    <!-- 2. La vivienda -->
+    <div class="seccion">
+      <div class="seccion-tit">
+        <span class="icono"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M3 11 12 4l9 7v9H3z"/><path d="M9 20v-6h6v6"/></svg></span>
+        <div><span class="paso">Paso 2</span><h2>La vivienda</h2></div>
+      </div>
+      <fieldset class="pildoras">
+        <legend>Tipo de vivienda</legend>
+        {% for clave, nombre in tipos.items() %}<label><input type="radio" name="tipo" value="{{ clave }}" {{ sel('tipo', clave, 'Independent House') }}><span>{{ nombre }}</span></label>{% endfor %}
+      </fieldset>
+      <div class="campos">
+        <div class="campo">
+          <label for="superficie_m2">Superficie construida</label>
+          <div class="con-unidad"><input id="superficie_m2" name="superficie_m2" type="number" inputmode="numeric" min="37" max="557" step="1" value="{{ val('superficie_m2') }}" placeholder="p. ej. 120" required><span>m²</span></div>
+          <div class="ayuda">De 37 a 557 m².</div>
+        </div>
+        <div class="campo">
+          <label for="anio">Año de construcción</label>
+          <input id="anio" name="anio" type="number" inputmode="numeric" min="1960" max="2023" step="1" value="{{ val('anio') }}" placeholder="p. ej. 2010" required>
+          <div class="ayuda" data-antiguedad>De 1960 a 2023.</div>
+        </div>
+        <div class="campo">
+          <label for="recamaras">Recámaras</label>
+          <input id="recamaras" name="recamaras" type="number" inputmode="numeric" min="1" max="8" step="1" value="{{ val('recamaras', 3) }}" required>
+        </div>
+        <div class="campo">
+          <label for="banos">Baños</label>
+          <input id="banos" name="banos" type="number" inputmode="numeric" min="1" max="8" step="1" value="{{ val('banos', 2) }}" required>
+        </div>
+        <div class="campo">
+          <label for="duenos">Dueños anteriores</label>
+          <input id="duenos" name="duenos" type="number" inputmode="numeric" min="0" max="6" step="1" value="{{ val('duenos', 0) }}" required>
+        </div>
+      </div>
+      <div class="campos">
+        <fieldset class="pildoras">
+          <legend>Amueblado</legend>
+          {% for clave, nombre in amueblado.items() %}<label><input type="radio" name="amueblado" value="{{ clave }}" {{ sel('amueblado', clave, 'Unfurnished') }}><span>{{ nombre }}</span></label>{% endfor %}
+        </fieldset>
+        <fieldset class="pildoras">
+          <legend>Cochera</legend>
+          <label><input type="radio" name="cochera" value="1" {{ sel('cochera', 1, 1) }}><span>Sí</span></label>
+          <label><input type="radio" name="cochera" value="0" {{ sel('cochera', 0, 1) }}><span>No</span></label>
+        </fieldset>
+        <fieldset class="pildoras">
+          <legend>Jardín</legend>
+          <label><input type="radio" name="jardin" value="1" {{ sel('jardin', 1, 0) }}><span>Sí</span></label>
+          <label><input type="radio" name="jardin" value="0" {{ sel('jardin', 0, 0) }}><span>No</span></label>
+        </fieldset>
+        <fieldset class="pildoras">
+          <legend>¿Caso legal abierto?</legend>
+          <label><input type="radio" name="legal" value="0" {{ sel('legal', 0, 0) }}><span>No</span></label>
+          <label><input type="radio" name="legal" value="1" {{ sel('legal', 1, 0) }}><span>Sí</span></label>
+        </fieldset>
+      </div>
+    </div>
+
+    <!-- 3. El comprador -->
+    <div class="seccion">
+      <div class="seccion-tit">
+        <span class="icono"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6"/></svg></span>
+        <div><span class="paso">Paso 3</span><h2>El comprador</h2></div>
+      </div>
+      <div class="campos">
+        <div class="campo">
+          <label for="ingreso">Ingreso mensual</label>
+          <input id="ingreso" name="ingreso" type="number" inputmode="decimal" min="2000" max="100000" step="any" value="{{ val('ingreso') }}" placeholder="p. ej. 45000" required>
+          <div class="ayuda">De 2 000 a 100 000.</div>
+        </div>
+        <div class="campo">
+          <label for="gastos">Gastos mensuales</label>
+          <input id="gastos" name="gastos" type="number" inputmode="decimal" min="500" max="20000" step="any" value="{{ val('gastos') }}" placeholder="p. ej. 9000" required>
+          <div class="ayuda">Renta, deudas, manutención (500 a 20 000).</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 4. Credito hipotecario -->
+    <div class="seccion">
+      <div class="seccion-tit">
+        <span class="icono"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="6" width="18" height="13" rx="2"/><path d="M3 10h18M7 15h4"/></svg></span>
+        <div><span class="paso">Paso 4</span><h2>Crédito hipotecario</h2></div>
+      </div>
+      <div class="campos">
+        <div class="campo">
+          <label for="precio">Precio de la vivienda</label>
+          <input id="precio" name="precio" type="number" inputmode="decimal" min="56288" max="4202721" step="any" value="{{ val('precio') }}" placeholder="p. ej. 1200000" required>
+          <div class="ayuda">De 56 288 a 4 202 721.</div>
+        </div>
+        <div class="campo">
+          <label for="enganche">Enganche</label>
+          <input id="enganche" name="enganche" type="number" inputmode="decimal" min="8966" max="2492723" step="any" value="{{ val('enganche') }}" placeholder="p. ej. 420000" required>
+          <div class="ayuda">Del 15 % al 60 % del precio.</div>
+        </div>
+      </div>
+      <fieldset class="pildoras" style="margin-top:16px">
+        <legend>Plazo del crédito <span class="ayuda" style="font-weight:400">· tasa de 6.5 % anual</span></legend>
+        {% for p in plazos %}<label><input type="radio" name="plazo" value="{{ p }}" {{ sel('plazo', p, 20) }}><span>{{ p }} años</span></label>{% endfor %}
+      </fieldset>
+      <div class="calculo" aria-live="polite">
+        <div><small>Crédito hipotecario</small><b data-calc="credito">—</b></div>
+        <div><small>Mensualidad</small><b data-calc="mensualidad">—</b></div>
+        <div data-calc-caja="proporcion"><small>Del ingreso mensual</small><b data-calc="proporcion">—</b></div>
+      </div>
+    </div>
+
+    <!-- 5. La visita -->
+    <div class="seccion">
+      <div class="seccion-tit">
+        <span class="icono"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="m12 3 2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1L3.2 9.5l6.1-.9z"/></svg></span>
+        <div><span class="paso">Paso 5 · opcional</span><h2>La visita</h2></div>
+      </div>
+      <fieldset class="pildoras chicas">
+        <legend>Del 1 al 10, ¿qué tanto le gustó la casa?</legend>
+        <label class="larga"><input type="radio" name="satisfaccion" value="" {% if not form.get('satisfaccion') %}checked{% endif %}><span>Aún no la visita</span></label>
+        {% for s in range(1, 11) %}<label><input type="radio" name="satisfaccion" value="{{ s }}" {{ sel('satisfaccion', s) }}><span>{{ s }}</span></label>{% endfor %}
+      </fieldset>
+    </div>
+
+    <button class="boton" type="submit">Calcular probabilidad de compra</button>
   </form>
 
-  {% if resultado %}
-  <section class="resultado" aria-live="polite">
-    <div class="detalle">Probabilidad de compra</div>
-    <div class="numero">{{ "%.0f"|format(resultado.probabilidad * 100) }} %</div>
-    <div class="barra"><span style="width: {{ '%.1f'|format(resultado.probabilidad * 100) }}%"></span></div>
-    <div class="detalle">
-      {% if resultado.variante == 'completo' %}
-        Estimación con la calificación de la visita.
-      {% else %}
-        Estimación antes de la visita: aun con todo a favor, solo 4 de cada 10 clientes terminan comprando,
-        porque falta saber si la casa le gusta. Pide la calificación después de la visita para afinarla.
-      {% endif %}
-    </div>
-    <div class="detalle" style="margin-top:8px">
-      Mensualidad estimada: {{ "{:,.0f}".format(resultado.mensualidad) }}
-      ({{ "%.0f"|format(resultado.proporcion_mensualidad * 100) }} % del salario).
-    </div>
-    {% if resultado.avisos %}
-    <ul class="avisos">{% for a in resultado.avisos %}<li>{{ a }}</li>{% endfor %}</ul>
-    {% endif %}
+  <section class="tarjeta resultado" id="resultado" aria-live="polite" aria-labelledby="tit-res">
+    {% include "_resultado.html" %}
   </section>
-  {% endif %}
-
-  <p class="nota">
-    Modelo entrenado con 140 000 casos del dataset “Global House Purchase Decision” (Kaggle).
-    Es un dataset sintético: la decisión depende solo de la calificación de la visita, los casos legales,
-    los delitos en la zona y la proporción de la mensualidad sobre el salario.
-  </p>
 </main>
+
+<section class="como" id="como-funciona">
+  <div class="tarjeta">
+    <h2>Cómo funciona este modelo</h2>
+    <p>Una explicación para quien lo use en clase o quiera entender de dónde sale el número.</p>
+    <div class="pasos">
+      <div><b>1. Los datos</b><p>200 000 clientes del dataset <em>Global House Purchase Decision</em> (Kaggle): 23 características y si compraron o no. El 23 % compró.</p></div>
+      <div><b>2. La división</b><p>70 % para entrenar (140 000), 10 % para elegir el modelo (20 000) y 20 % para la prueba final (40 000), cada parte con la misma proporción de compras.</p></div>
+      <div><b>3. El modelo</b><p>Un <em>gradient boosting</em>: muchos árboles de decisión pequeños, cada uno corrigiendo los errores del anterior. Se comparó contra una regresión logística y una línea base.</p></div>
+      <div><b>4. Dos versiones</b><p>Con la calificación de la visita (23 variables) y antes de la visita (22). La app elige sola cuál usar según lo que llenes.</p></div>
+    </div>
+
+    <details>
+      <summary>¿Qué tan bien funciona? (resultados en 40 000 clientes de prueba)</summary>
+      <table class="metr">
+        <thead><tr><th>Métrica</th><th>Con visita</th><th>Antes de la visita</th></tr></thead>
+        <tbody>
+          <tr><td>AUC (1 = separa perfecto, 0.5 = al azar)</td><td class="n">{{ '%.3f'|format(metricas.completo.auc) }}</td><td class="n">{{ '%.3f'|format(metricas.sin_satisfaccion.auc) }}</td></tr>
+          <tr><td>Exactitud</td><td class="n">{{ '%.1f'|format(metricas.completo.exactitud * 100) }} %</td><td class="n">{{ '%.1f'|format(metricas.sin_satisfaccion.exactitud * 100) }} %</td></tr>
+          <tr><td>Precisión (de los que predice “compra”, cuántos compran)</td><td class="n">{{ '%.1f'|format(metricas.completo.precision * 100) }} %</td><td class="n">{{ '%.1f'|format(metricas.sin_satisfaccion.precision * 100) }} %</td></tr>
+          <tr><td>Exhaustividad (de los que compran, cuántos detecta)</td><td class="n">{{ '%.1f'|format(metricas.completo.exhaustividad * 100) }} %</td><td class="n">{{ '%.1f'|format(metricas.sin_satisfaccion.exhaustividad * 100) }} %</td></tr>
+        </tbody>
+      </table>
+      <p>Antes de la visita la exactitud engaña: el modelo casi nunca pasa de 50 %, así que casi nunca dice “compra”. Lo valioso es la probabilidad, que está bien calibrada: cuando dice 40 %, compra cerca del 40 %.</p>
+    </details>
+
+    <details>
+      <summary>¿Por qué solo 4 condiciones deciden el resultado?</summary>
+      <p>El modelo recibe las 23 características, pero al medir cuánto aporta cada una (revolviendo sus valores y viendo cuánto empeora) solo cuatro importan: la calificación de la visita, los casos legales, los delitos en la zona y la proporción de la mensualidad sobre el ingreso. En este dataset un cliente compra solo si la calificación es de 7 o más, no hay casos legales, hay 2 delitos o menos y la mensualidad es como máximo el 39 % del ingreso.</p>
+      <p>La ubicación, el tamaño o el tipo de vivienda no cambian la decisión. El precio, el enganche, el plazo y el ingreso sí influyen, pero solo a través de la mensualidad. Esto indica que el dataset es <strong>sintético</strong>: en la vida real pesan muchos más factores. Por eso la app muestra la lista de condiciones en lugar de presentar el porcentaje como una verdad absoluta.</p>
+    </details>
+
+    <details>
+      <summary>Limitaciones y uso responsable</summary>
+      <ul>
+        <li>Los datos no incluyen la edad ni el historial crediticio del comprador; por eso no se piden.</li>
+        <li>Las cantidades están en la moneda del dataset, que mezcla 13 países sin convertir.</li>
+        <li>Fuera de los rangos con que se entrenó (por ejemplo, un ingreso mayor a 100 000) la app no calcula, para no extrapolar.</li>
+        <li>Es una herramienta académica: sirve para entender el modelo, no para negar un crédito a nadie.</li>
+      </ul>
+    </details>
+  </div>
+</section>
+
+<footer>
+  <div>
+    Proyecto académico de aprendizaje automático · Modelo de scikit-learn, entrenamientos en
+    <a href="https://dagshub.com/garmendiavictor03/prediccion-compra-vivienda/experiments" rel="noreferrer">DagsHub</a>,
+    código en <a href="https://github.com/gxrmendix/prediccion-compra-vivienda" rel="noreferrer">GitHub</a>, alojado en Azure App Service (plan gratuito).
+  </div>
+</footer>
 </body>
 </html>

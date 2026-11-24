@@ -1,0 +1,60 @@
+<div class="vivo"><i></i> Resultado en vivo</div>
+{% if resultado %}
+  {% set p = resultado.probabilidad %}
+  {% set clase = 'bien' if p >= 0.7 else ('medio' if p >= 0.3 else 'mal') %}
+  {% set largo = 251.33 %}
+  <h2 id="tit-res" class="oculto">Resultado</h2>
+  <svg class="medidor" viewBox="0 0 200 120" role="img" aria-label="Probabilidad de compra: {{ '%.0f'|format(p * 100) }} por ciento" data-prob="{{ '%.4f'|format(p) }}">
+    <path style="stroke:var(--arena)" d="M20 105a80 80 0 0 1 160 0" fill="none" stroke-width="16" stroke-linecap="round"/>
+    <path class="arco" style="stroke:var(--{{ clase }})" d="M20 105a80 80 0 0 1 160 0" fill="none" stroke-width="16" stroke-linecap="round"
+          stroke-dasharray="{{ largo }}" stroke-dashoffset="{{ '%.2f'|format(largo * (1 - p)) }}"/>
+    <text class="numero" style="fill:var(--tinta)" x="100" y="92" text-anchor="middle" font-size="40" data-numero>{{ '%.0f'|format(p * 100) }} %</text>
+    <text style="fill:var(--tenue)" x="100" y="114" text-anchor="middle" font-size="11" font-family="Inter, sans-serif">probabilidad de compra</text>
+  </svg>
+  <div class="nivel"><span class="insignia {{ clase }}">{{ resultado.nivel }}</span></div>
+  <p class="explica">
+    {% if resultado.variante == 'completo' %}
+      Estimación con la calificación de la visita ({{ resultado.n_variables }} variables).
+    {% else %}
+      Estimación antes de la visita ({{ resultado.n_variables }} variables). Aun con todo a favor, solo 4 de cada 10 clientes terminan comprando: falta saber si la casa le gusta.
+    {% endif %}
+  </p>
+
+  <h3>Las 4 condiciones que deciden</h3>
+  <ul class="condiciones">
+    {% for c in resultado.condiciones %}
+    <li style="--i: {{ loop.index0 }}">
+      {% if c.estado is none %}<span class="marca-c pend" aria-label="pendiente">?</span>
+      {% elif c.estado %}<span class="marca-c si" aria-label="se cumple">✓</span>
+      {% else %}<span class="marca-c no" aria-label="no se cumple">✗</span>{% endif %}
+      <div><strong>{{ c.texto }}</strong><small>{{ c.detalle }}</small></div>
+    </li>
+    {% endfor %}
+  </ul>
+  {% if resultado.sugerencia %}<div class="sugerencia"><b>¿Cómo mejorarla?</b> {{ resultado.sugerencia }}</div>{% endif %}
+
+  <div class="datos">
+    <div class="dato"><small>Crédito hipotecario</small><b>{{ miles(resultado.credito) }}</b></div>
+    <div class="dato"><small>Mensualidad</small><b>{{ miles(resultado.mensualidad) }}</b></div>
+    <div class="dato"><small>Enganche</small><b>{{ '%.0f'|format(resultado.proporcion_enganche * 100) }} % del precio</b></div>
+    <div class="dato"><small>Antigüedad de la vivienda</small><b>{{ resultado.antiguedad }} años</b></div>
+  </div>
+  <p class="nota-modelo">Gradient boosting · {{ resultado.n_variables }} variables · <a href="#como-funciona">¿cómo se calcula?</a></p>
+{% elif parcial and errores %}
+  <div class="vacio">
+    <h2 id="tit-res">Revisa algunos datos</h2>
+    <p>Completa o corrige esto para ver la probabilidad:</p>
+    <ul style="text-align:left;font-size:.88rem;color:var(--tinta-2)">{% for e in errores %}<li>{{ e }}</li>{% endfor %}</ul>
+  </div>
+{% else %}
+  <div class="vacio">
+    <svg viewBox="0 0 160 120" aria-hidden="true">
+      <path style="stroke:var(--borde)" d="M20 112h120" stroke-width="3" stroke-linecap="round"/>
+      <path style="fill:var(--verde-claro);stroke:var(--verde)" d="M38 112V62l42-32 42 32v50z" stroke-width="3" stroke-linejoin="round"/>
+      <path style="fill:var(--terracota)" d="M68 112V84h24v28"/>
+      <g class="lupa"><circle style="stroke:var(--terracota)" cx="116" cy="38" r="14" fill="none" stroke-width="3"/><path style="stroke:var(--terracota)" d="m126 48 10 10" stroke-width="3" stroke-linecap="round"/></g>
+    </svg>
+    <h2 id="tit-res">Aquí verás el resultado</h2>
+    <p>Llena los datos (o prueba un ejemplo de arriba) y obtén la probabilidad de compra, el crédito y la mensualidad, y qué condición cumple o le falta a tu cliente.</p>
+  </div>
+{% endif %}
