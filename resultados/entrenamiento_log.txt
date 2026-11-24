@@ -1,0 +1,10 @@
+importancia (validacion): {'satisfaction_score': 4.72166, 'legal_cases_on_property': 1.85068, 'crime_cases_reported': 0.98959, 'emi_to_income_ratio': 0.86948, 'country': 0.0, 'city': 0.0}
+completo          linea_base           validacion: auc=0.5000 log_loss=0.5397 brier=0.1773 exactitud=0.7696 precision=0.0000 exhaustividad=0.0000 f1=0.0000 tasa_predicha_media=0.2303
+completo          regresion_logistica  validacion: auc=0.9838 log_loss=0.1375 brier=0.0433 exactitud=0.9385 precision=0.8667 exhaustividad=0.8665 f1=0.8666 tasa_predicha_media=0.2318
+completo          gradient_boosting    validacion: auc=1.0000 log_loss=0.0000 brier=0.0000 exactitud=1.0000 precision=1.0000 exhaustividad=1.0000 f1=1.0000 tasa_predicha_media=0.2304
+elegido completo: gradient_boosting | prueba: auc=1.0000 log_loss=0.0000 brier=0.0000 exactitud=1.0000 precision=1.0000 exhaustividad=1.0000 f1=1.0000 tasa_predicha_media=0.2303
+sin_satisfaccion  linea_base           validacion: auc=0.5000 log_loss=0.5397 brier=0.1773 exactitud=0.7696 precision=0.0000 exhaustividad=0.0000 f1=0.0000 tasa_predicha_media=0.2303
+sin_satisfaccion  regresion_logistica  validacion: auc=0.7714 log_loss=0.4272 brier=0.1481 exactitud=0.7602 precision=0.4197 exhaustividad=0.1066 f1=0.1700 tasa_predicha_media=0.2306
+sin_satisfaccion  gradient_boosting    validacion: auc=0.7756 log_loss=0.3866 brier=0.1380 exactitud=0.7694 precision=0.3889 exhaustividad=0.0015 f1=0.0030 tasa_predicha_media=0.2296
+elegido sin_satisfaccion: gradient_boosting | prueba: auc=0.7813 log_loss=0.3868 brier=0.1380 exactitud=0.7695 precision=0.3824 exhaustividad=0.0014 f1=0.0028 tasa_predicha_media=0.2302
+subido a DagsHub en 26 s

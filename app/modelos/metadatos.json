@@ -1,0 +1,20 @@
+{
+ "sklearn": "1.9.1",
+ "completo": {
+  "modelo": "gradient_boosting",
+  "variables": [
+   "satisfaction_score",
+   "legal_cases_on_property",
+   "crime_cases_reported",
+   "emi_to_income_ratio"
+  ]
+ },
+ "sin_satisfaccion": {
+  "modelo": "gradient_boosting",
+  "variables": [
+   "legal_cases_on_property",
+   "crime_cases_reported",
+   "emi_to_income_ratio"
+  ]
+ }
+}
