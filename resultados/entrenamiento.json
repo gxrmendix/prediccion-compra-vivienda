@@ -6,56 +6,57 @@
   "filas_validacion": 20000,
   "filas_prueba": 40000
  },
- "seleccion": {
-  "parametros": {
-   "etapa": "seleccion",
-   "variables": 23,
-   "modelo": "gradient_boosting",
-   "iteraciones": 168
-  },
-  "metricas_validacion": {
-   "auc": 1.0,
-   "log_loss": 4.787144511290122e-08,
-   "brier": 8.223218027925698e-15,
-   "exactitud": 1.0,
-   "precision": 1.0,
-   "exhaustividad": 1.0,
-   "f1": 1.0,
-   "tasa_predicha_media": 0.23035000119308838
-  },
-  "importancia": {
-   "satisfaction_score": 4.72166,
-   "legal_cases_on_property": 1.85068,
-   "crime_cases_reported": 0.98959,
-   "emi_to_income_ratio": 0.86948,
-   "country": 0.0,
-   "city": 0.0,
-   "loan_amount": 0.0,
-   "customer_salary": 0.0,
-   "garden": 0.0,
-   "constructed_year": 0.0,
-   "property_type": 0.0,
-   "previous_owners": 0.0,
-   "price": 0.0,
-   "property_size_sqft": 0.0,
-   "garage": 0.0,
-   "neighbourhood_rating": 0.0,
-   "rooms": 0.0,
-   "bathrooms": 0.0,
-   "loan_tenure_years": 0.0,
-   "connectivity_score": 0.0,
-   "down_payment": 0.0,
-   "monthly_expenses": -0.0,
-   "furnishing_status": -0.0
-  }
- },
  "corridas": [
   {
-   "nombre": "seleccion_23_variables",
+   "nombre": "completo__linea_base",
    "parametros": {
-    "etapa": "seleccion",
-    "variables": 23,
+    "variante": "completo",
+    "modelo": "linea_base",
+    "n_variables": 23,
+    "variables": "country,city,property_type,furnishing_status,property_size_sqft,price,constructed_year,previous_owners,rooms,bathrooms,garage,garden,crime_cases_reported,legal_cases_on_property,customer_salary,loan_amount,loan_tenure_years,monthly_expenses,down_payment,emi_to_income_ratio,neighbourhood_rating,connectivity_score,satisfaction_score",
+    "candidato_para_la_app": true
+   },
+   "metricas_validacion": {
+    "auc": 0.5,
+    "log_loss": 0.5396989048361384,
+    "brier": 0.1772888775510204,
+    "exactitud": 0.76965,
+    "precision": 0.0,
+    "exhaustividad": 0.0,
+    "f1": 0.0,
+    "tasa_predicha_media": 0.23034285714285715
+   },
+   "segundos": 0.04822683334350586
+  },
+  {
+   "nombre": "completo__regresion_logistica",
+   "parametros": {
+    "variante": "completo",
+    "modelo": "regresion_logistica",
+    "n_variables": 23,
+    "variables": "country,city,property_type,furnishing_status,property_size_sqft,price,constructed_year,previous_owners,rooms,bathrooms,garage,garden,crime_cases_reported,legal_cases_on_property,customer_salary,loan_amount,loan_tenure_years,monthly_expenses,down_payment,emi_to_income_ratio,neighbourhood_rating,connectivity_score,satisfaction_score",
+    "candidato_para_la_app": true
+   },
+   "metricas_validacion": {
+    "auc": 0.985615073342658,
+    "log_loss": 0.12919544680286696,
+    "brier": 0.0402380895367768,
+    "exactitud": 0.94325,
+    "precision": 0.8731728288907996,
+    "exhaustividad": 0.8817017581940525,
+    "f1": 0.8774165676638946,
+    "tasa_predicha_media": 0.23130489974224103
+   },
+   "segundos": 0.5393002033233643
+  },
+  {
+   "nombre": "completo__gradient_boosting",
+   "parametros": {
+    "variante": "completo",
     "modelo": "gradient_boosting",
+    "n_variables": 23,
+    "variables": "country,city,property_type,furnishing_status,property_size_sqft,price,constructed_year,previous_owners,rooms,bathrooms,garage,garden,crime_cases_reported,legal_cases_on_property,customer_salary,loan_amount,loan_tenure_years,monthly_expenses,down_payment,emi_to_income_ratio,neighbourhood_rating,connectivity_score,satisfaction_score",
+    "candidato_para_la_app": true,
     "iteraciones": 168
    },
    "metricas_validacion": {
@@ -68,55 +69,16 @@
     "f1": 1.0,
     "tasa_predicha_media": 0.23035000119308838
    },
-   "segundos": 0.9905648231506348
+   "segundos": 1.0031521320343018
   },
   {
-   "nombre": "completo__linea_base",
+   "nombre": "completo__referencia_reducida",
    "parametros": {
-    "etapa": "variante",
     "variante": "completo",
-    "modelo": "linea_base",
-    "variables": "satisfaction_score,legal_cases_on_property,crime_cases_reported,emi_to_income_ratio"
-   },
-   "metricas_validacion": {
-    "auc": 0.5,
-    "log_loss": 0.5396989048361384,
-    "brier": 0.1772888775510204,
-    "exactitud": 0.76965,
-    "precision": 0.0,
-    "exhaustividad": 0.0,
-    "f1": 0.0,
-    "tasa_predicha_media": 0.23034285714285715
-   },
-   "segundos": 0.013333797454833984
-  },
-  {
-   "nombre": "completo__regresion_logistica",
-   "parametros": {
-    "etapa": "variante",
-    "variante": "completo",
-    "modelo": "regresion_logistica",
-    "variables": "satisfaction_score,legal_cases_on_property,crime_cases_reported,emi_to_income_ratio"
-   },
-   "metricas_validacion": {
-    "auc": 0.9837711618429081,
-    "log_loss": 0.13753680700210574,
-    "brier": 0.043266748260522125,
-    "exactitud": 0.93855,
-    "precision": 0.8666956144159792,
-    "exhaustividad": 0.8665074886042978,
-    "f1": 0.8666015413003365,
-    "tasa_predicha_media": 0.23178398958560847
-   },
-   "segundos": 0.10826516151428223
-  },
-  {
-   "nombre": "completo__gradient_boosting",
-   "parametros": {
-    "etapa": "variante",
-    "variante": "completo",
-    "modelo": "gradient_boosting",
+    "modelo": "referencia_reducida",
+    "n_variables": 4,
     "variables": "satisfaction_score,legal_cases_on_property,crime_cases_reported,emi_to_income_ratio",
+    "candidato_para_la_app": false,
     "iteraciones": 168
    },
    "metricas_validacion": {
@@ -129,15 +91,16 @@
     "f1": 1.0,
     "tasa_predicha_media": 0.23035000128728333
    },
-   "segundos": 0.5573511123657227
+   "segundos": 0.6228921413421631
   },
   {
    "nombre": "sin_satisfaccion__linea_base",
    "parametros": {
-    "etapa": "variante",
     "variante": "sin_satisfaccion",
     "modelo": "linea_base",
-    "variables": "legal_cases_on_property,crime_cases_reported,emi_to_income_ratio"
+    "n_variables": 22,
+    "variables": "country,city,property_type,furnishing_status,property_size_sqft,price,constructed_year,previous_owners,rooms,bathrooms,garage,garden,crime_cases_reported,legal_cases_on_property,customer_salary,loan_amount,loan_tenure_years,monthly_expenses,down_payment,emi_to_income_ratio,neighbourhood_rating,connectivity_score",
+    "candidato_para_la_app": true
    },
    "metricas_validacion": {
     "auc": 0.5,
@@ -149,35 +112,59 @@
     "f1": 0.0,
     "tasa_predicha_media": 0.23034285714285715
    },
-   "segundos": 0.008804082870483398
+   "segundos": 0.03529500961303711
   },
   {
    "nombre": "sin_satisfaccion__regresion_logistica",
    "parametros": {
-    "etapa": "variante",
     "variante": "sin_satisfaccion",
     "modelo": "regresion_logistica",
-    "variables": "legal_cases_on_property,crime_cases_reported,emi_to_income_ratio"
+    "n_variables": 22,
+    "variables": "country,city,property_type,furnishing_status,property_size_sqft,price,constructed_year,previous_owners,rooms,bathrooms,garage,garden,crime_cases_reported,legal_cases_on_property,customer_salary,loan_amount,loan_tenure_years,monthly_expenses,down_payment,emi_to_income_ratio,neighbourhood_rating,connectivity_score",
+    "candidato_para_la_app": true
    },
    "metricas_validacion": {
-    "auc": 0.7714368813125346,
-    "log_loss": 0.4272363854198186,
-    "brier": 0.14813481220888966,
-    "exactitud": 0.76025,
-    "precision": 0.41965811965811967,
-    "exhaustividad": 0.1065769481224224,
-    "f1": 0.16998442097974728,
-    "tasa_predicha_media": 0.23061163747672814
+    "auc": 0.7722819357350831,
+    "log_loss": 0.42423669650026313,
+    "brier": 0.1474827964822179,
+    "exactitud": 0.75955,
+    "precision": 0.40019762845849804,
+    "exhaustividad": 0.08790970262643803,
+    "f1": 0.14415376401494928,
+    "tasa_predicha_media": 0.23078791128871304
    },
-   "segundos": 0.08658504486083984
+   "segundos": 0.6551499366760254
   },
   {
    "nombre": "sin_satisfaccion__gradient_boosting",
    "parametros": {
-    "etapa": "variante",
     "variante": "sin_satisfaccion",
     "modelo": "gradient_boosting",
+    "n_variables": 22,
+    "variables": "country,city,property_type,furnishing_status,property_size_sqft,price,constructed_year,previous_owners,rooms,bathrooms,garage,garden,crime_cases_reported,legal_cases_on_property,customer_salary,loan_amount,loan_tenure_years,monthly_expenses,down_payment,emi_to_income_ratio,neighbourhood_rating,connectivity_score",
+    "candidato_para_la_app": true,
+    "iteraciones": 84
+   },
+   "metricas_validacion": {
+    "auc": 0.7777984620044763,
+    "log_loss": 0.3871197313127939,
+    "brier": 0.13825605906790667,
+    "exactitud": 0.7684,
+    "precision": 0.37623762376237624,
+    "exhaustividad": 0.00824831777729542,
+    "f1": 0.016142735768903994,
+    "tasa_predicha_media": 0.2300906787069708
+   },
+   "segundos": 0.7572228908538818
+  },
+  {
+   "nombre": "sin_satisfaccion__referencia_reducida",
+   "parametros": {
+    "variante": "sin_satisfaccion",
+    "modelo": "referencia_reducida",
+    "n_variables": 3,
     "variables": "legal_cases_on_property,crime_cases_reported,emi_to_income_ratio",
+    "candidato_para_la_app": false,
     "iteraciones": 120
    },
    "metricas_validacion": {
@@ -190,31 +177,31 @@
     "f1": 0.003027027027027027,
     "tasa_predicha_media": 0.22964195500456913
    },
-   "segundos": 0.7079567909240723
+   "segundos": 0.67724609375
   }
  ],
  "elegidos": {
   "completo": {
    "nombre": "completo__gradient_boosting",
    "metricas_validacion": {
-    "auc": 0.9999999999999999,
-    "log_loss": 4.80192768019005e-08,
-    "brier": 8.190873131039993e-15,
+    "auc": 1.0,
+    "log_loss": 4.787144511290122e-08,
+    "brier": 8.223218027925698e-15,
     "exactitud": 1.0,
     "precision": 1.0,
     "exhaustividad": 1.0,
     "f1": 1.0,
-    "tasa_predicha_media": 0.23035000128728333
+    "tasa_predicha_media": 0.23035000119308838
    },
    "metricas_prueba": {
-    "auc": 1.0,
-    "log_loss": 4.8246467345459106e-08,
-    "brier": 8.724057158733794e-15,
+    "auc": 1.0000000000000002,
+    "log_loss": 4.7971122360549876e-08,
+    "brier": 8.702247675874225e-15,
     "exactitud": 1.0,
     "precision": 1.0,
     "exhaustividad": 1.0,
     "f1": 1.0,
-    "tasa_predicha_media": 0.23032500087927082
+    "tasa_predicha_media": 0.23032500090713184
    },
    "matriz_confusion_prueba": {
     "VN": 30787,
@@ -222,105 +209,88 @@
     "FN": 0,
     "VP": 9213
    },
-   "probabilidades_distintas": [
-    0.0,
-    1.0
-   ]
+   "importancia": {
+    "satisfaction_score": 4.72166,
+    "legal_cases_on_property": 1.85068,
+    "crime_cases_reported": 0.98959,
+    "emi_to_income_ratio": 0.86948,
+    "country": 0.0,
+    "city": 0.0,
+    "loan_amount": 0.0,
+    "customer_salary": 0.0,
+    "garden": 0.0,
+    "constructed_year": 0.0,
+    "property_type": 0.0,
+    "previous_owners": 0.0,
+    "price": 0.0,
+    "property_size_sqft": 0.0,
+    "garage": 0.0,
+    "neighbourhood_rating": 0.0,
+    "rooms": 0.0,
+    "bathrooms": 0.0,
+    "loan_tenure_years": 0.0,
+    "connectivity_score": 0.0,
+    "down_payment": 0.0,
+    "monthly_expenses": -0.0,
+    "furnishing_status": -0.0
+   },
+   "prob_maxima_prueba": 0.9999999421491415,
+   "clientes_sobre_50": 9213
   },
   "sin_satisfaccion": {
    "nombre": "sin_satisfaccion__gradient_boosting",
    "metricas_validacion": {
-    "auc": 0.7756221269436375,
-    "log_loss": 0.38658004944128804,
-    "brier": 0.13801230367937034,
-    "exactitud": 0.76945,
-    "precision": 0.3888888888888889,
-    "exhaustividad": 0.001519426958975472,
-    "f1": 0.003027027027027027,
-    "tasa_predicha_media": 0.22964195500456913
+    "auc": 0.7777984620044763,
+    "log_loss": 0.3871197313127939,
+    "brier": 0.13825605906790667,
+    "exactitud": 0.7684,
+    "precision": 0.37623762376237624,
+    "exhaustividad": 0.00824831777729542,
+    "f1": 0.016142735768903994,
+    "tasa_predicha_media": 0.2300906787069708
    },
    "metricas_prueba": {
-    "auc": 0.7812587030241094,
-    "log_loss": 0.3867681951403587,
-    "brier": 0.1379880074327222,
-    "exactitud": 0.769475,
-    "precision": 0.38235294117647056,
-    "exhaustividad": 0.001411049603820688,
-    "f1": 0.0028117227208824484,
-    "tasa_predicha_media": 0.23023326387234275
+    "auc": 0.7769902031419468,
+    "log_loss": 0.3879759560176673,
+    "brier": 0.13855010321130848,
+    "exactitud": 0.768325,
+    "precision": 0.37264150943396224,
+    "exhaustividad": 0.008574839900141105,
+    "f1": 0.01676392572944297,
+    "tasa_predicha_media": 0.23065388418053326
    },
    "matriz_confusion_prueba": {
-    "VN": 30766,
-    "FP": 21,
-    "FN": 9200,
-    "VP": 13
+    "VN": 30654,
+    "FP": 133,
+    "FN": 9134,
+    "VP": 79
    },
-   "probabilidades_distintas": [
-    0.0,
-    0.331,
-    0.339,
-    0.348,
-    0.355,
-    0.358,
-    0.359,
-    0.365,
-    0.373,
-    0.374,
-    0.375,
-    0.376,
-    0.378,
-    0.38,
-    0.381,
-    0.382,
-    0.384,
-    0.385,
-    0.387,
-    0.388,
-    0.389,
-    0.39,
-    0.391,
-    0.392,
-    0.393,
-    0.394,
-    0.395,
-    0.396,
-    0.397,
-    0.398,
-    0.399,
-    0.4,
-    0.401,
-    0.402,
-    0.403,
-    0.404,
-    0.405,
-    0.406,
-    0.407,
-    0.408,
-    0.409,
-    0.41,
-    0.411,
-    0.412,
-    0.414,
-    0.415,
-    0.416,
-    0.417,
-    0.418,
-    0.419,
-    0.42,
-    0.425,
-    0.426,
-    0.43,
-    0.432,
-    0.434,
-    0.437,
-    0.438,
-    0.439,
-    0.442,
-    0.447,
-    0.456,
-    0.463,
-    0.615
-   ]
+   "importancia": {
+    "legal_cases_on_property": 0.54572,
+    "crime_cases_reported": 0.28625,
+    "emi_to_income_ratio": 0.23571,
+    "constructed_year": 0.00034,
+    "loan_amount": 0.00031,
+    "price": 0.00028,
+    "city": 0.00025,
+    "property_type": 0.00024,
+    "property_size_sqft": 0.0002,
+    "down_payment": 0.00016,
+    "rooms": 8e-05,
+    "previous_owners": 6e-05,
+    "neighbourhood_rating": 5e-05,
+    "garage": 5e-05,
+    "loan_tenure_years": 1e-05,
+    "garden": 0.0,
+    "connectivity_score": -1e-05,
+    "bathrooms": -1e-05,
+    "country": -2e-05,
+    "furnishing_status": -2e-05,
+    "monthly_expenses": -0.0002,
+    "customer_salary": -0.00033
+   },
+   "prob_maxima_prueba": 0.7494799992881284,
+   "clientes_sobre_50": 212
   }
  },
  "dagshub_mlflow": "https://dagshub.com/garmendiavictor03/prediccion-compra-vivienda.mlflow"

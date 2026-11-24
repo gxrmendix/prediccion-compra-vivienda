@@ -1,20 +1,204 @@
 {
  "sklearn": "1.9.1",
- "completo": {
-  "modelo": "gradient_boosting",
-  "variables": [
-   "satisfaction_score",
-   "legal_cases_on_property",
-   "crime_cases_reported",
-   "emi_to_income_ratio"
+ "variables": [
+  "country",
+  "city",
+  "property_type",
+  "furnishing_status",
+  "property_size_sqft",
+  "price",
+  "constructed_year",
+  "previous_owners",
+  "rooms",
+  "bathrooms",
+  "garage",
+  "garden",
+  "crime_cases_reported",
+  "legal_cases_on_property",
+  "customer_salary",
+  "loan_amount",
+  "loan_tenure_years",
+  "monthly_expenses",
+  "down_payment",
+  "emi_to_income_ratio",
+  "neighbourhood_rating",
+  "connectivity_score",
+  "satisfaction_score"
+ ],
+ "rangos": {
+  "property_size_sqft": [
+   400.0,
+   6000.0
+  ],
+  "price": [
+   56288.0,
+   4202721.0
+  ],
+  "constructed_year": [
+   1960.0,
+   2023.0
+  ],
+  "previous_owners": [
+   0.0,
+   6.0
+  ],
+  "rooms": [
+   1.0,
+   8.0
+  ],
+  "bathrooms": [
+   1.0,
+   8.0
+  ],
+  "garage": [
+   0.0,
+   1.0
+  ],
+  "garden": [
+   0.0,
+   1.0
+  ],
+  "crime_cases_reported": [
+   0.0,
+   10.0
+  ],
+  "legal_cases_on_property": [
+   0.0,
+   1.0
+  ],
+  "customer_salary": [
+   2000.0,
+   100000.0
+  ],
+  "loan_amount": [
+   23504.0,
+   3520150.0
+  ],
+  "loan_tenure_years": [
+   10.0,
+   30.0
+  ],
+  "monthly_expenses": [
+   500.0,
+   20000.0
+  ],
+  "down_payment": [
+   8966.0,
+   2492723.0
+  ],
+  "emi_to_income_ratio": [
+   0.0,
+   3.38
+  ],
+  "neighbourhood_rating": [
+   1.0,
+   10.0
+  ],
+  "connectivity_score": [
+   1.0,
+   10.0
+  ],
+  "satisfaction_score": [
+   1.0,
+   10.0
+  ],
+  "proporcion_enganche": [
+   0.1500035272815633,
+   0.5999935125870038
   ]
  },
- "sin_satisfaccion": {
-  "modelo": "gradient_boosting",
-  "variables": [
-   "legal_cases_on_property",
-   "crime_cases_reported",
-   "emi_to_income_ratio"
+ "ciudades_por_pais": {
+  "Australia": [
+   "Brisbane",
+   "Melbourne",
+   "Sydney"
+  ],
+  "Brazil": [
+   "Rio de Janeiro",
+   "São Paulo"
+  ],
+  "Canada": [
+   "Montreal",
+   "Toronto",
+   "Vancouver"
+  ],
+  "China": [
+   "Beijing",
+   "Shanghai",
+   "Shenzhen"
+  ],
+  "France": [
+   "Lyon",
+   "Marseille",
+   "Paris"
+  ],
+  "Germany": [
+   "Berlin",
+   "Frankfurt",
+   "Munich"
+  ],
+  "India": [
+   "Bangalore",
+   "Chennai",
+   "Delhi",
+   "Hyderabad",
+   "Mumbai",
+   "Pune"
+  ],
+  "Japan": [
+   "Kyoto",
+   "Osaka",
+   "Tokyo"
+  ],
+  "Singapore": [
+   "Singapore"
+  ],
+  "South Africa": [
+   "Cape Town",
+   "Johannesburg"
+  ],
+  "UAE": [
+   "Abu Dhabi",
+   "Dubai"
+  ],
+  "UK": [
+   "Birmingham",
+   "Liverpool",
+   "London",
+   "Manchester"
+  ],
+  "USA": [
+   "Chicago",
+   "Houston",
+   "Los Angeles",
+   "New York",
+   "San Francisco"
   ]
+ },
+ "metricas_prueba": {
+  "completo": {
+   "auc": 1.0,
+   "log_loss": 0.0,
+   "brier": 0.0,
+   "exactitud": 1.0,
+   "precision": 1.0,
+   "exhaustividad": 1.0,
+   "f1": 1.0,
+   "tasa_predicha_media": 0.2303
+  },
+  "sin_satisfaccion": {
+   "auc": 0.777,
+   "log_loss": 0.388,
+   "brier": 0.1386,
+   "exactitud": 0.7683,
+   "precision": 0.3726,
+   "exhaustividad": 0.0086,
+   "f1": 0.0168,
+   "tasa_predicha_media": 0.2307
+  }
+ },
+ "modelos": {
+  "completo": "gradient_boosting",
+  "sin_satisfaccion": "gradient_boosting"
  }
 }
