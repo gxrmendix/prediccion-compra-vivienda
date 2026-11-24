@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>¿Comprará la casa?</title>
+<style>
+  :root {
+    --fondo: #f6f5f1; --superficie: #fcfcfb; --tinta: #0b0b0b; --tinta-2: #52514e; --tenue: #898781;
+    --rejilla: #e1e0d9; --azul: #2a78d6; --azul-suave: #cde2fb; --naranja: #eb6834; --alerta: #fdf1ea;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --fondo: #0d0d0d; --superficie: #1a1a19; --tinta: #ffffff; --tinta-2: #c3c2b7; --tenue: #898781;
+      --rejilla: #2c2c2a; --azul: #3987e5; --azul-suave: #1c3557; --naranja: #d95926; --alerta: #2b1d16;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--fondo); color: var(--tinta);
+         font: 16px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+  main { max-width: 760px; margin: 0 auto; padding: 32px 16px 48px; }
+  h1 { font-size: 1.7rem; margin: 0 0 4px; }
+  .subtitulo { color: var(--tinta-2); margin: 0 0 24px; }
+  form, .resultado, .nota { background: var(--superficie); border: 1px solid var(--rejilla); border-radius: 10px; padding: 20px; }
+  fieldset { border: 0; padding: 0; margin: 0 0 18px; }
+  legend { font-weight: 700; margin-bottom: 10px; }
+  .rejilla { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; }
+  label { display: block; font-size: .92rem; color: var(--tinta-2); margin-bottom: 4px; }
+  input, select { width: 100%; padding: 9px 10px; border: 1px solid var(--rejilla); border-radius: 6px;
+                  background: var(--fondo); color: var(--tinta); font-size: 1rem; }
+  input:focus, select:focus { outline: 2px solid var(--azul); outline-offset: 1px; }
+  .opciones { display: flex; gap: 18px; padding-top: 6px; }
+  .opciones label { display: flex; gap: 6px; align-items: center; color: var(--tinta); }
+  .opciones input { width: auto; }
+  .ayuda { font-size: .82rem; color: var(--tenue); margin-top: 3px; }
+  button { background: var(--azul); color: #fff; border: 0; border-radius: 6px; padding: 11px 22px;
+           font-size: 1rem; font-weight: 600; cursor: pointer; }
+  .errores { background: var(--alerta); border-left: 3px solid var(--naranja); padding: 10px 14px; margin-bottom: 16px; border-radius: 4px; }
+  .resultado { margin-top: 20px; }
+  .numero { font-size: 3rem; font-weight: 800; line-height: 1; }
+  .barra { height: 10px; background: var(--rejilla); border-radius: 5px; margin: 12px 0 6px; overflow: hidden; }
+  .barra span { display: block; height: 100%; background: var(--azul); border-radius: 5px; }
+  .detalle { color: var(--tinta-2); font-size: .92rem; }
+  ul.avisos { padding-left: 18px; margin: 10px 0 0; }
+  .nota { margin-top: 20px; font-size: .88rem; color: var(--tinta-2); }
+</style>
+</head>
+<body>
+<main>
+  <h1>¿Comprará la casa?</h1>
+  <p class="subtitulo">Estima la probabilidad de que tu cliente compre, con los datos que un vendedor puede conseguir.</p>
+
+  <form method="post" novalidate>
+    {% if errores %}
+    <div class="errores" role="alert">{% for e in errores %}<div>{{ e }}</div>{% endfor %}</div>
+    {% endif %}
+
+    <fieldset>
+      <legend>La propiedad</legend>
+      <div class="rejilla">
+        <div>
+          <label>¿Tiene algún caso legal abierto?</label>
+          <div class="opciones">
+            <label><input type="radio" name="legal" value="0" {% if form.get('legal', '0') == '0' %}checked{% endif %}> No</label>
+            <label><input type="radio" name="legal" value="1" {% if form.get('legal') == '1' %}checked{% endif %}> Sí</label>
+          </div>
+        </div>
+        <div>
+          <label for="crimenes">Delitos reportados en la zona</label>
+          <input id="crimenes" name="crimenes" type="number" min="0" max="50" step="1" value="{{ form.get('crimenes', '') }}" placeholder="p. ej. 1">
+          <div class="ayuda">Casos reportados recientemente cerca de la propiedad.</div>
+        </div>
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend>El cliente</legend>
+      <div class="rejilla">
+        <div>
+          <label for="salario">Salario mensual</label>
+          <input id="salario" name="salario" type="number" min="1" step="any" value="{{ form.get('salario', '') }}" placeholder="p. ej. 12000">
+        </div>
+        <div>
+          <label for="prestamo">Monto del préstamo que pediría</label>
+          <input id="prestamo" name="prestamo" type="number" min="1" step="any" value="{{ form.get('prestamo', '') }}" placeholder="p. ej. 250000">
+        </div>
+        <div>
+          <label for="plazo">Plazo del préstamo</label>
+          <select id="plazo" name="plazo">
+            {% for p in plazos %}<option value="{{ p }}" {% if form.get('plazo', '20') == p|string %}selected{% endif %}>{{ p }} años</option>{% endfor %}
+          </select>
+          <div class="ayuda">La mensualidad se calcula al 6.5 % anual.</div>
+        </div>
+        <div>
+          <label for="satisfaccion">Calificación de la visita (opcional)</label>
+          <select id="satisfaccion" name="satisfaccion">
+            <option value="">Todavía no visita la casa</option>
+            {% for s in range(1, 11) %}<option value="{{ s }}" {% if form.get('satisfaccion') == s|string %}selected{% endif %}>{{ s }} de 10</option>{% endfor %}
+          </select>
+          <div class="ayuda">Del 1 al 10, ¿qué tanto le gustó la casa al cliente?</div>
+        </div>
+      </div>
+    </fieldset>
+
+    <button type="submit">Calcular probabilidad</button>
+  </form>
+
+  {% if resultado %}
+  <section class="resultado" aria-live="polite">
+    <div class="detalle">Probabilidad de compra</div>
+    <div class="numero">{{ "%.0f"|format(resultado.probabilidad * 100) }} %</div>
+    <div class="barra"><span style="width: {{ '%.1f'|format(resultado.probabilidad * 100) }}%"></span></div>
+    <div class="detalle">
+      {% if resultado.variante == 'completo' %}
+        Estimación con la calificación de la visita.
+      {% else %}
+        Estimación antes de la visita: aun con todo a favor, solo 4 de cada 10 clientes terminan comprando,
+        porque falta saber si la casa le gusta. Pide la calificación después de la visita para afinarla.
+      {% endif %}
+    </div>
+    <div class="detalle" style="margin-top:8px">
+      Mensualidad estimada: {{ "{:,.0f}".format(resultado.mensualidad) }}
+      ({{ "%.0f"|format(resultado.proporcion_mensualidad * 100) }} % del salario).
+    </div>
+    {% if resultado.avisos %}
+    <ul class="avisos">{% for a in resultado.avisos %}<li>{{ a }}</li>{% endfor %}</ul>
+    {% endif %}
+  </section>
+  {% endif %}
+
+  <p class="nota">
+    Modelo entrenado con 140 000 casos del dataset “Global House Purchase Decision” (Kaggle).
+    Es un dataset sintético: la decisión depende solo de la calificación de la visita, los casos legales,
+    los delitos en la zona y la proporción de la mensualidad sobre el salario.
+  </p>
+</main>
+</body>
+</html>
