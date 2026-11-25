@@ -40,8 +40,9 @@ az webapp config appsettings set -n $APP -g $GRUPO -o none --settings \
   PYTHONPATH=/home/site/wwwroot/.python_packages/lib/site-packages
 az webapp config set -n $APP -g $GRUPO -o none \
   --startup-file "python -m gunicorn --bind=0.0.0.0 --timeout 120 --workers 1 app:app"
-az webapp deploy -n $APP -g $GRUPO --src-path build/app.zip --type zip -o none
+# La app debe estar encendida: con la app detenida, el despliegue espera a que arranque y se agota el tiempo
 az webapp start -n $APP -g $GRUPO -o none
+az webapp deploy -n $APP -g $GRUPO --src-path build/app.zip --type zip -o none
 
 echo "esperando a que responda..."
 for i in $(seq 1 40); do
